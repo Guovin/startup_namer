@@ -35,14 +35,37 @@ class RandomWordsState extends State<RandomWords> {
 
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
+  void _pushSaved() {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      final tiles = _saved.map((pair) {
+        return new ListTile(
+          title: new Text(
+            pair.asPascalCase,
+            style: _biggerFont,
+          ),
+        );
+      });
+      final divided =
+          ListTile.divideTiles(tiles: tiles, context: context).toList();
+
+      return new Scaffold(
+          appBar: new AppBar(title: new Text('Saved Suggestions')),
+          body: new ListView(
+            children: divided,
+          ));
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     // final wordPair = new WordPair.random();
     // return new Text(wordPair.asPascalCase);
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Startup Name Generator'),
-      ),
+          title: new Text('Startup Name Generator'),
+          actions: <Widget>[
+            new IconButton(onPressed: _pushSaved, icon: new Icon(Icons.list))
+          ]),
       body: _buildSuggestions(),
     );
   }
